@@ -17,7 +17,7 @@ class Frontend {
 
 		add_action( 'wp_head', [ $this, 'print_css' ] );
 		add_filter( 'body_class', [ $this, 'body_class' ] );
-		add_filter( 'the_content', [ $this, 'apply_builder_in_content' ], 999999 );
+		add_filter( 'the_content', [ $this, 'apply_builder_in_content' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_styles' ] );
 
@@ -163,7 +163,12 @@ class Frontend {
 		if ( empty( $data ) || 'builder' !== $edit_mode )
 			return;
 
-		$css_code = $this->_parse_schemes_css_code();
+		$css_code = '';
+
+		if ( Schemes_Manager::is_schemes_enabled() ) {
+			$css_code = $this->_parse_schemes_css_code();
+		}
+
 		foreach ( $data as $section ) {
 			$css_code .= $this->_parse_style_item( $section );
 		}

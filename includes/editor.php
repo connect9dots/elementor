@@ -49,9 +49,6 @@ class Editor {
 			return $settings;
 		} );
 
-		// Set the headers to prevent caching for the different browsers
-		nocache_headers();
-
 		// Tell to WP Cache plugins do not cache this request.
 		Utils::do_not_cache();
 
@@ -207,12 +204,12 @@ class Editor {
 		);
 
 		wp_register_script(
-			'dialog',
+			'elementor-dialog',
 			ELEMENTOR_ASSETS_URL . 'admin/js/lib/dialog' . $suffix . '.js',
 			[
 				'jquery-ui-position',
 			],
-			'1.0.5',
+			'3.0.0',
 			true
 		);
 
@@ -243,7 +240,7 @@ class Editor {
 				'tipsy',
 				'imagesloaded',
 				'heartbeat',
-				'dialog',
+				'elementor-dialog',
 				'jquery-select2',
 			],
 			Plugin::instance()->get_version(),
@@ -285,14 +282,17 @@ class Editor {
 				'controls' => Plugin::instance()->controls_manager->get_controls_data(),
 				'elements' => Plugin::instance()->elements_manager->get_register_elements_data(),
 				'widgets' => Plugin::instance()->widgets_manager->get_register_widgets_data(),
-				'schemes' => Plugin::instance()->schemes_manager->get_registered_schemes_data(),
+				'schemes' => [
+					'items' => Plugin::instance()->schemes_manager->get_registered_schemes_data(),
+					'is_schemes_enabled' => Schemes_Manager::is_schemes_enabled(),
+				],
 				'default_schemes' => Plugin::instance()->schemes_manager->get_schemes_defaults(),
 				'system_schemes' => Plugin::instance()->schemes_manager->get_system_schemes(),
 				'wp_editor' => $this->_get_wp_editor_config(),
 				'post_id' => $post_id,
 				'post_permalink' => get_the_permalink(),
 				'edit_post_link' => get_edit_post_link(),
-				'settings_page_link' => admin_url( 'admin.php?page=' . Settings::PAGE_ID ),
+				'settings_page_link' => Settings::get_url(),
 				'elementor_site' => 'https://elementor.com/',
 				'assets_url' => ELEMENTOR_ASSETS_URL,
 				'data' => Plugin::instance()->db->get_builder( $post_id, DB::REVISION_DRAFT ),

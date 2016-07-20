@@ -155,7 +155,10 @@ module.exports = function( grunt ) {
 			},
 			all: [
 				'Gruntfile.js',
-				'assets/admin/js/dev/**/*.js'
+				'assets/admin/js/dev/**/*.js',
+				'assets/js/dev/**/*.js',
+				'assets/js/admin.js',
+				'assets/js/frontend.js'
 			]
 		},
 
@@ -225,8 +228,8 @@ module.exports = function( grunt ) {
 
 			scripts: {
 				files: [
-					'assets/js/*.js',
-					'!assets/js/*.min.js',
+					'assets/js/admin.js',
+					'assets/js/frontend.js',
 					'assets/js/dev/**/*.js',
 					'assets/admin/js/dev/**/*.js'
 				],

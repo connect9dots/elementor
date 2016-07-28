@@ -8,9 +8,10 @@ class Widgets_Manager {
 	/**
 	 * @var Widget_Base[]
 	 */
-	protected $_register_widgets = [];
+	protected $_register_widgets = null;
 
-	public function init() {
+	private function _init_widgets() {
+		include_once( ELEMENTOR_PATH . 'includes/elements/base.php' );
 		include( ELEMENTOR_PATH . 'includes/widgets/base.php' );
 
 		$build_widgets_filename = [
@@ -42,10 +43,7 @@ class Widgets_Manager {
 			'sidebar',
 		];
 
-		if ( Utils::is_development_mode() ) {
-
-		}
-
+		$this->_register_widgets = [];
 		foreach ( $build_widgets_filename as $widget_filename ) {
 			include( ELEMENTOR_PATH . 'includes/widgets/' . $widget_filename . '.php' );
 
@@ -109,6 +107,9 @@ class Widgets_Manager {
 	}
 
 	public function get_register_widgets() {
+		if ( is_null( $this->_register_widgets ) ) {
+			$this->_init_widgets();
+		}
 		return $this->_register_widgets;
 	}
 
@@ -130,10 +131,16 @@ class Widgets_Manager {
 	}
 
 	public function ajax_render_widget() {
-		ob_start();
+		if ( empty( $_POST['_nonce'] ) || ! wp_verify_nonce( $_POST['_nonce'], 'elementor-editing' ) ) {
+			wp_send_json_error( new \WP_Error( 'token_expired' ) );
+		}
 
 		if ( empty( $_POST['post_id'] ) ) {
 			wp_send_json_error( new \WP_Error( 'no_post_id', 'No post_id' ) );
+		}
+
+		if ( ! User::is_current_user_can_edit( $_POST['post_id'] ) ) {
+			wp_send_json_error( new \WP_Error( 'no_access' ) );
 		}
 
 		// Override the global $post for the render
@@ -141,6 +148,8 @@ class Widgets_Manager {
 
 		$data = json_decode( stripslashes( html_entity_decode( $_POST['data'] ) ), true );
 
+		// Start buffering
+		ob_start();
 		$widget = $this->get_widget( $data['widgetType'] );
 		if ( false !== $widget ) {
 			$data['settings'] = $widget->get_parse_values( $data['settings'] );
@@ -157,6 +166,10 @@ class Widgets_Manager {
 	}
 
 	public function ajax_get_wp_widget_form() {
+		if ( empty( $_POST['_nonce'] ) || ! wp_verify_nonce( $_POST['_nonce'], 'elementor-editing' ) ) {
+			die;
+		}
+
 		$widget_type = $_POST['widget_type'];
 		$widget_obj = $this->get_widget( $widget_type );
 
@@ -176,8 +189,6 @@ class Widgets_Manager {
 	}
 
 	public function __construct() {
-		add_action( 'init', [ $this, 'init' ] );
-
 		add_action( 'wp_ajax_elementor_render_widget', [ $this, 'ajax_render_widget' ] );
 		add_action( 'wp_ajax_elementor_editor_get_wp_widget_form', [ $this, 'ajax_get_wp_widget_form' ] );
 	}

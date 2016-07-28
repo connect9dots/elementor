@@ -58,7 +58,8 @@
     max-width: none;
     top: 50%;
     left: 50%;
-    transform: translateY(-50%) translateX(-50%);
+    transform: translateY(-50%) translateX(-50%); }
+  .elementor .elementor-html5-video {
     object-fit: cover; }
   .elementor .elementor-background-overlay {
     height: 100%;
@@ -141,7 +142,8 @@
 
 .elementor-widget-wrap {
   position: relative;
-  width: 100%; }
+  width: 100%;
+  z-index: 1; }
 
 .elementor-widget {
   position: relative; }
@@ -544,7 +546,7 @@
   .elementor-tabs .elementor-tabs-wrapper {
     overflow: hidden; }
     .elementor-tabs .elementor-tabs-wrapper .elementor-tab-title {
-      display: inline-block; }
+      display: table-cell; }
       .elementor-tabs .elementor-tabs-wrapper .elementor-tab-title > span {
         position: relative;
         display: block;
@@ -674,14 +676,12 @@
   padding: 0; }
 .elementor-widget-icon-list .elementor-icon-list-item {
   margin: 0;
-  padding: 0;
-  line-height: 1.5;
-  display: table; }
+  padding: 0; }
   .elementor-widget-icon-list .elementor-icon-list-item a {
-    display: table; }
+    display: inline; }
 .elementor-widget-icon-list .elementor-icon-list-icon,
 .elementor-widget-icon-list .elementor-icon-list-text {
-  display: table-cell;
+  display: inline;
   vertical-align: middle; }
 .elementor-widget-icon-list .elementor-icon-list-icon {
   width: 1em;
@@ -722,8 +722,6 @@
 .elementor-image-carousel-wrapper .slick-image-stretch .slick-slide .slick-slide-image {
   width: 100%; }
 
-.elementor-widget-image-box .elementor-image-box-wrapper {
-  overflow: hidden; }
 .elementor-widget-image-box .elementor-image-box-content {
   width: 100%; }
 @media (min-width: 768px) {
@@ -755,14 +753,13 @@
 @media (max-width: 767px) {
   .elementor-widget-image-box .elementor-image-box-img {
     margin-left: auto !important;
-    margin-right: auto !important; } }
+    margin-right: auto !important;
+    margin-bottom: 15px; } }
 .elementor-widget-image-box .elementor-image-box-wrapper {
   text-align: center; }
 .elementor-widget-image-box .elementor-image-box-description {
   margin: 0; }
 
-.elementor-widget-icon-box .elementor-icon-box-wrapper {
-  overflow: hidden; }
 @media (min-width: 768px) {
   .elementor-widget-icon-box.elementor-position-left .elementor-icon-box-wrapper, .elementor-widget-icon-box.elementor-position-right .elementor-icon-box-wrapper {
     display: -ms-flexbox;
@@ -792,7 +789,8 @@
 @media (max-width: 767px) {
   .elementor-widget-icon-box .elementor-icon-box-icon {
     margin-left: auto !important;
-    margin-right: auto !important; } }
+    margin-right: auto !important;
+    margin-bottom: 15px; } }
 .elementor-widget-icon-box .elementor-icon-box-wrapper {
   text-align: center; }
 .elementor-widget-icon-box .elementor-icon-box-description {
@@ -913,6 +911,9 @@
   border-radius: 10%; }
 .elementor-widget.elementor-shape-circle .elementor-icon.elementor-social-icon {
   border-radius: 50%; }
+
+body.elementor-page .elementor-widget-menu-anchor {
+  margin-bottom: 0; }
 
 .slick-slider {
   position: relative;
@@ -1145,13 +1146,13 @@ ul.slick-dots {
 }
 */
 @media (max-width: 767px) {
-  body:not(.elementor-editor-active) .elementor-hidden-phone, body:not(.elementor-editor-active) .elementor-visible-tablet, body:not(.elementor-editor-active) .elementor-visible-desktop {
+  body:not(.elementor-editor-active) .elementor-hidden-phone {
     display: none; } }
 @media (min-width: 480px) and (max-width: 1023px) {
-  body:not(.elementor-editor-active) .elementor-hidden-tablet, body:not(.elementor-editor-active) .elementor-visible-phone, body:not(.elementor-editor-active) .elementor-visible-desktop {
+  body:not(.elementor-editor-active) .elementor-hidden-tablet {
     display: none; } }
 @media (min-width: 1024px) {
-  body:not(.elementor-editor-active) .elementor-hidden-desktop, body:not(.elementor-editor-active) .elementor-visible-phone, body:not(.elementor-editor-active) .elementor-visible-tablet {
+  body:not(.elementor-editor-active) .elementor-hidden-desktop {
     display: none; } }
 body:not(.elementor-editor-active) .elementor-hidden {
   display: none; }

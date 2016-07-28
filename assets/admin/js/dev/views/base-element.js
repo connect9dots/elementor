@@ -1,4 +1,5 @@
-var BaseElementView;
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	BaseElementView;
 
 BaseElementView = Marionette.CompositeView.extend( {
 	tagName: 'div',
@@ -32,6 +33,10 @@ BaseElementView = Marionette.CompositeView.extend( {
 
 	events: function() {
 		return _.extend( {}, this.baseEvents, this.elementEvents );
+	},
+
+	getTemplateType: function() {
+		return 'js';
 	},
 
 	initialize: function() {
@@ -72,9 +77,11 @@ BaseElementView = Marionette.CompositeView.extend( {
 
 		this.getRemoveDialog = function() {
 			if ( ! removeDialog ) {
+				var elementTitle = this.model.getTitle();
+
 				removeDialog = elementor.dialogsManager.createWidget( 'confirm', {
-					message: elementor.translate( 'dialog_confirm_delete' ),
-					headerMessage: elementor.translate( 'delete_element' ),
+					message: elementor.translate( 'dialog_confirm_delete', [ elementTitle.toLowerCase() ] ),
+					headerMessage: elementor.translate( 'delete_element', [ elementTitle ] ),
 					strings: {
 						confirm: elementor.translate( 'delete' ),
 						cancel: elementor.translate( 'cancel' )
@@ -186,11 +193,40 @@ BaseElementView = Marionette.CompositeView.extend( {
 	},
 
 	onSettingsChanged: function( settings ) {
-		elementor.setFlagEditorChange( true );
+		if ( this.model.get( 'editSettings' ) !== settings ) {
+			// Change flag only if server settings was changed
+			elementor.setFlagEditorChange( true );
+		}
 
         this.renderStyles();
 		this.renderCustomClasses();
 		this.enqueueFonts();
+
+		// Make sure is correct model
+		if ( settings instanceof BaseSettingsModel ) {
+			var isContentChanged = false;
+
+			_.each( settings.changedAttributes(), function( settingValue, settingKey ) {
+				if ( ! settings.isStyleControl( settingKey ) && ! settings.isClassControl( settingKey ) ) {
+					isContentChanged = true;
+				}
+			} );
+
+			if ( ! isContentChanged ) {
+				return;
+			}
+		}
+
+		// Re-render the template
+		switch ( this.getTemplateType() ) {
+			case 'js' :
+				this.model.setHtmlCache();
+				this.render();
+				break;
+
+			default :
+				this.model.renderRemoteServer();
+		}
 	},
 
 	onClickRemove: function( event ) {

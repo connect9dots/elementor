@@ -277,6 +277,7 @@ class Editor {
 			'ElementorConfig',
 			[
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+				'nonce' => wp_create_nonce( 'elementor-editing' ),
 				'preview_link' => add_query_arg( 'elementor-preview', '', remove_query_arg( 'elementor' ) ),
 				'elements_categories' => Plugin::instance()->elements_manager->get_categories(),
 				'controls' => Plugin::instance()->controls_manager->get_controls_data(),
@@ -301,11 +302,11 @@ class Editor {
 				'introduction' => User::get_introduction(),
 				'i18n' => [
 					'elementor' => __( 'Elementor', 'elementor' ),
-					'dialog_confirm_delete' => __( 'Are you sure you want to remove this item?', 'elementor' ),
+					'dialog_confirm_delete' => __( 'Are you sure you want to remove this {0}?', 'elementor' ),
 					'dialog_user_taken_over' => __( '{0} has taken over and is currently editing. Do you want to take over this page editing?', 'elementor' ),
 					'delete' => __( 'Delete', 'elementor' ),
 					'cancel' => __( 'Cancel', 'elementor' ),
-					'delete_element' => __( 'Delete Element', 'elementor' ),
+					'delete_element' => __( 'Delete {0}', 'elementor' ),
 					'take_over' => __( 'Take Over', 'elementor' ),
 					'go_back' => __( 'Go Back', 'elementor' ),
 					'saved' => __( 'Saved', 'elementor' ),

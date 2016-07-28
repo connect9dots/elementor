@@ -1,5 +1,5 @@
 {
-	"name": "connect9dots/elementor",
+	"name": "pojome/elementor",
 	"description": "Elementor",
 	"minimum-stability": "dev",
 	"license": "gpl3",
@@ -7,10 +7,6 @@
 		{
 			"name": "Yakir Sitbon",
 			"email": "yakir@pojo.me"
-		},
-		{
-			"name": "office",
-			"email": "office@9dots.at"
 		}
 	],
 	"require": {
